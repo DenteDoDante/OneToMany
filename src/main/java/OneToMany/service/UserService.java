@@ -13,15 +13,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public Users registerUser(String email, String password) {
-        String encodedPassword = passwordEncoder.encode(password); // Criptografa a senha
-        Users users = new Users();
-        users.setEmail(email);
-        users.setPassword(encodedPassword);
+    public Users registerUser(Users users) {
+
+        users.setPassword(passwordEncoder.encode(users.getPassword()));// Criptografa a senha
         return userRepository.save(users);
     }
 
