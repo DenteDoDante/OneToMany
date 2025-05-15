@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import OneToMany.entity.Users;
@@ -29,18 +28,29 @@ public class AuthController {
 
         userService.registerUser(users);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Usuário registrado com sucesso.");
+        response.put("successRegister", users.getEmail() + " Registrado com sucesso!");
         return ResponseEntity.ok(response);
     }
 
-    // TODO refazer em REST
     @PostMapping("/login")
-    public String loginUser(@RequestParam String email, @RequestParam String senha) {
-        Users user = userService.authenticateUser(email, senha);
-        if (user != null) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody Users user) {
+        Map<String, String> response = new HashMap<>();
 
-            return "redirect:/home";
+        try {
+            Users authenticatedUser = userService.authenticateUser(user.getEmail(), user.getPassword());
+
+            if (authenticatedUser != null) {
+                response.put("message", "Login feito com sucesso!");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("message", "Usuário ou senha inválidos");
+                return ResponseEntity.status(401).body(response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // <- VER NO CONSOLE DO BACKEND
+            response.put("message", "Erro interno no servidor");
+            return ResponseEntity.status(500).body(response);
         }
-        return "login";
     }
+
 }

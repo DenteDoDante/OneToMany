@@ -26,10 +26,4 @@ public class UserFeedback {
     @NotNull
     private Long feedback;
 
-    @NotNull
-    private String email;
-
-    @NotNull
-    private String password;
-
 }

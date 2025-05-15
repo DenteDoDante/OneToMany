@@ -28,7 +28,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 
                                 // Configuração de autorização
                                 .authorizeHttpRequests(authz -> authz
-                                                .requestMatchers("/login", "/register", "/api/auth/register")
+                                                .requestMatchers(
+                                                                "/register",
+                                                                "/login",
+                                                                "/api/auth/register",
+                                                                "/api/auth/login")
                                                 .permitAll() // Permite acesso público às páginas de login e registro
                                                 .anyRequest().authenticated() // Exige autenticação para as outras
                                                                               // páginas
@@ -61,12 +65,11 @@ public class SecurityConfig implements WebMvcConfigurer {
         @SuppressWarnings("null")
         @Override
         public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/auth/register")
-                                .allowedOrigins("http://localhost:8081") // Origem permitida
+                registry.addMapping("/api/auth/**") // Permite todos os endpoints relacionados à autenticação
+                                .allowedOrigins("http://localhost:8081") // Permite o acesso do front-end no
+                                                                         // localhost:8081
                                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
                                 .allowedHeaders("Authorization", "Content-Type") // Cabeçalhos permitidos
                                 .allowCredentials(true); // Permite credenciais (cookies, etc.)
-
         }
-
 }

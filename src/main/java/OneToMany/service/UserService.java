@@ -31,6 +31,13 @@ public class UserService {
         return null;
     }
 
+    public Users findUserByEmail(String email) 
+    {
+        Users users = userRepository.findByEmail(email);
+
+        return users;
+    }
+
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         Users users = userRepository.findByName(name);
         if (users == null) {
